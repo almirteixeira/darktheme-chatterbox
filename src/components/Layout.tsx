@@ -48,7 +48,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Desktop Side Navigation */}
       <div className={cn(
-        "fixed z-50 md:relative h-screen w-64 glass-effect transition-all duration-300 ease-in-out",
+        "fixed z-30 md:relative h-screen w-64 glass-effect transition-all duration-300 ease-in-out",
         isMobile && (isSidebarOpen ? "left-0" : "-left-64"),
         "hidden md:block"
       )}>
@@ -98,7 +98,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {isMobile && (
         <button 
           onClick={toggleSidebar}
-          className="fixed top-4 left-4 z-50 p-2 rounded-md glass-effect md:hidden"
+          className="fixed top-4 left-4 z-40 p-2 rounded-md glass-effect md:hidden"
         >
           <Menu size={20} />
         </button>
@@ -107,7 +107,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Mobile sidebar overlay */}
       {isMobile && isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/70 z-40 md:hidden"
+          className="fixed inset-0 bg-black/70 z-30 md:hidden"
           onClick={toggleSidebar}
         />
       )}
@@ -115,7 +115,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Mobile sidebar */}
       {isMobile && (
         <div className={cn(
-          "fixed top-0 z-50 h-screen w-64 glass-effect transition-all duration-300 ease-in-out",
+          "fixed top-0 z-40 h-screen w-64 glass-effect transition-all duration-300 ease-in-out",
           isSidebarOpen ? "left-0" : "-left-64"
         )}>
           <div className="flex flex-col h-full p-4">

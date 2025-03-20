@@ -53,15 +53,19 @@ const Index = () => {
           )}
           
           <div className="flex-1 overflow-hidden flex flex-col">
-            <MessageArea 
-              messages={themeMessages} 
-              theme={selectedTheme} 
-            />
+            <div className="flex-1 overflow-y-auto">
+              <MessageArea 
+                messages={themeMessages} 
+                theme={selectedTheme} 
+              />
+            </div>
             
-            <MessageInput 
-              onSendMessage={handleSendMessage} 
-              disabled={!selectedThemeId} 
-            />
+            <div className="mt-auto">
+              <MessageInput 
+                onSendMessage={handleSendMessage} 
+                disabled={!selectedThemeId} 
+              />
+            </div>
           </div>
         </div>
       </div>

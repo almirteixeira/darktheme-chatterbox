@@ -28,7 +28,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, disabled }) 
     <form 
       onSubmit={handleSubmit} 
       className={cn(
-        "p-3 glass-effect transition-all duration-300",
+        "p-3 glass-effect transition-all duration-300 z-10",
         disabled && "opacity-60 pointer-events-none"
       )}
     >
