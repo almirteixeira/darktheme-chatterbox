@@ -13,3 +13,8 @@ export interface ThemeType {
   name: string;
   unread: number;
 }
+
+export interface SettingsType {
+  aiApiKey: string;
+  aiBaseUrl: string;
+}

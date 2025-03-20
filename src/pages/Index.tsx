@@ -5,15 +5,22 @@ import Sidebar from '@/components/Sidebar';
 import MessageArea from '@/components/MessageArea';
 import MessageInput from '@/components/MessageInput';
 import { useMessages } from '@/hooks/useMessages';
+import { useSettings } from '@/hooks/useSettings';
+import { Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import SettingsDialog from '@/components/SettingsDialog';
 
 const Index = () => {
   const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { 
     addMessage, 
     getThemeMessages, 
     getThemeById, 
-    resetUnread 
+    resetUnread,
+    deleteMessage
   } = useMessages();
+  const { settings } = useSettings();
 
   const themeMessages = getThemeMessages(selectedThemeId);
   const selectedTheme = getThemeById(selectedThemeId);
@@ -35,6 +42,10 @@ const Index = () => {
     }
   };
 
+  const handleDeleteMessage = (messageId: string) => {
+    deleteMessage(messageId);
+  };
+
   return (
     <Layout>
       <div className="flex h-full">
@@ -47,8 +58,16 @@ const Index = () => {
         
         <div className="flex-1 flex flex-col h-full overflow-hidden">
           {selectedTheme && (
-            <div className="p-4 glass-effect">
+            <div className="p-4 glass-effect flex justify-between items-center">
               <h2 className="text-xl font-medium">{selectedTheme.name}</h2>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSettingsOpen(true)}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <Settings size={20} />
+              </Button>
             </div>
           )}
           
@@ -56,7 +75,8 @@ const Index = () => {
             <div className="flex-1 overflow-y-auto pb-16">
               <MessageArea 
                 messages={themeMessages} 
-                theme={selectedTheme} 
+                theme={selectedTheme}
+                onDeleteMessage={handleDeleteMessage}
               />
             </div>
             
@@ -69,6 +89,11 @@ const Index = () => {
           </div>
         </div>
       </div>
+
+      <SettingsDialog 
+        open={isSettingsOpen} 
+        onOpenChange={setIsSettingsOpen} 
+      />
     </Layout>
   );
 };

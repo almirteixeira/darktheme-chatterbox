@@ -1,18 +1,29 @@
-
 import React, { useEffect, useRef } from 'react';
-import { CheckCircle2, Clock } from 'lucide-react';
+import { CheckCircle2, Clock, Trash2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MessageType, ThemeType } from '@/types';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface MessageAreaProps {
   messages: MessageType[];
   theme: ThemeType | null;
+  onDeleteMessage?: (messageId: string) => void;
 }
 
-const MessageArea: React.FC<MessageAreaProps> = ({ messages, theme }) => {
+const MessageArea: React.FC<MessageAreaProps> = ({ messages, theme, onDeleteMessage }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [messageToDelete, setMessageToDelete] = React.useState<string | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -21,6 +32,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({ messages, theme }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const handleDelete = (messageId: string) => {
+    setMessageToDelete(messageId);
+  };
+
+  const confirmDelete = () => {
+    if (messageToDelete && onDeleteMessage) {
+      onDeleteMessage(messageToDelete);
+      setMessageToDelete(null);
+    }
+  };
 
   if (!theme) {
     return (
@@ -101,7 +123,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ messages, theme }) => {
               <div 
                 key={message.id} 
                 className={cn(
-                  "max-w-[80%] rounded-2xl px-4 py-2 animate-slide-in",
+                  "max-w-[80%] rounded-2xl px-4 py-2 animate-slide-in relative group",
                   message.isTask 
                     ? "bg-primary/20 border border-primary/10" 
                     : "bg-accent/80 backdrop-blur-sm"
@@ -129,12 +151,35 @@ const MessageArea: React.FC<MessageAreaProps> = ({ messages, theme }) => {
                     </div>
                   </div>
                 </div>
+                <button 
+                  onClick={() => handleDelete(message.id)}
+                  className="absolute top-2 right-2 p-1 rounded-full bg-background/20 text-muted-foreground hover:text-destructive hover:bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X size={14} />
+                </button>
               </div>
             ))}
           </div>
         );
       })}
       <div ref={messagesEndRef} />
+
+      <AlertDialog open={messageToDelete !== null} onOpenChange={(open) => !open && setMessageToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir mensagem</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir esta mensagem? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive hover:bg-destructive/90">
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
