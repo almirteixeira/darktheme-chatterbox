@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 export interface SettingsType {
   aiApiKey: string;
   aiBaseUrl: string;
+  aiModel: string;
 }
 
 const SETTINGS_STORAGE_KEY = 'themechat-settings';
@@ -17,6 +18,7 @@ export const useSettings = () => {
       return {
         aiApiKey: '',
         aiBaseUrl: 'https://api.deepseek.com/v1',
+        aiModel: 'deepseek-chat',
       };
     }
   });

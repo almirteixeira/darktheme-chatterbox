@@ -17,4 +17,5 @@ export interface ThemeType {
 export interface SettingsType {
   aiApiKey: string;
   aiBaseUrl: string;
+  aiModel: string;
 }

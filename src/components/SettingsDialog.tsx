@@ -13,6 +13,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useSettings } from '@/hooks/useSettings';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -29,11 +36,16 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({
   const [formData, setFormData] = React.useState({
     aiApiKey: settings.aiApiKey || '',
     aiBaseUrl: settings.aiBaseUrl || 'https://api.deepseek.com/v1',
+    aiModel: settings.aiModel || 'deepseek-chat',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleModelChange = (value: string) => {
+    setFormData(prev => ({ ...prev, aiModel: value }));
   };
 
   const handleSave = () => {
@@ -78,6 +90,19 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({
             <p className="text-xs text-muted-foreground">
               A chave é armazenada apenas no seu navegador e nunca é enviada para nossos servidores.
             </p>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="aiModel">Modelo de IA</Label>
+            <Select onValueChange={handleModelChange} value={formData.aiModel}>
+              <SelectTrigger id="aiModel">
+                <SelectValue placeholder="Selecione um modelo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="deepseek-chat">DeepSeek Chat</SelectItem>
+                <SelectItem value="deepseek-coder">DeepSeek Coder</SelectItem>
+                <SelectItem value="deepseek-chat-130b">DeepSeek Chat 130B</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <DialogFooter>

@@ -25,7 +25,7 @@ export const getAiResponse = async (
         'Authorization': `Bearer ${settings.aiApiKey}`,
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: settings.aiModel,
         messages: [
           {
             role: 'user',
